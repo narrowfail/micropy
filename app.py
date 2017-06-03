@@ -6,8 +6,9 @@ import settings
 from optparse import OptionParser
 from flask import request
 from flask_api import FlaskAPI, exceptions
+from cassandra.cluster import Cluster
 from structures import DynamicActionArray
-from util import parse_timesamp, parse_action
+from util import parse_timesamp, parse_action, cassandra_insert
 
 parser = OptionParser()
 parser.add_option("-p", "--port", dest="port",
@@ -22,6 +23,11 @@ app = FlaskAPI(__name__)
 data = DynamicActionArray(settings.ACTION_ARRAY_INIT_SIZE,
                           settings.ACTION_GROW_FACTOR,
                           settings.SCORE_VALUES)
+
+# Cassandra startup
+if settings.CASSANDRA_SUPPORT:
+    cluster = Cluster(settings.CASSANDRA_CLUSTER_IPS)
+    session = cluster.connect(settings.CASSANDRA_KEYSPACE)
 
 
 @app.route('/', methods=['GET'])
@@ -45,6 +51,8 @@ def user_stats(uid):
             action = parse_action(request.data.get('action', ''), min_action=1,
                                   max_action=len(settings.SCORE_VALUES))
             data.append(uid, action, timestamp)
+            if settings.CASSANDRA_SUPPORT:
+                cassandra_insert(session, uid, action, timestamp)
             return {'message': 'ok'}
         except Exception as ex:
             raise exceptions.ParseError(

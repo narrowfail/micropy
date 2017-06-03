@@ -13,6 +13,11 @@ LOCAL_SERVER_DEBUG = True
 LOCAL_SERVER_PORT = 8000
 LOCAL_SERVER_IP = "0.0.0.0"
 
+# Cassandra settings
+CASSANDRA_SUPPORT = True
+CASSANDRA_CLUSTER_IPS = ['127.0.0.1', ]
+CASSANDRA_KEYSPACE = 'micropy'
+
 # Try to impor local settigs to override
 try:
     from local_settings import *
