@@ -6,8 +6,8 @@ import numpy as np
 
 class DynamicActionArray(object):
     """
-    Dynamic to store user ids, actions and timestamps using a NumPy structured
-    array.
+    Structure to store user ids, actions and timestamps using a NumPy
+    structured array.
     """
 
     def __init__(self, size, grow_factor, score_values):
@@ -39,7 +39,7 @@ class DynamicActionArray(object):
         :param timestamp: Action date and time.
         :return: None.
         """
-        # Resie like a Java ArrayList
+        # Resize like a Java ArrayList
         if self.length == self.size:
             self.size = int(self.grow_factor * self.size)
             self._npa = np.resize(self._npa, self.size)
