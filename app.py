@@ -1,14 +1,15 @@
+#!/usr/bin/env python
 """
 Demo microservice that records player events.
 """
 import os
-import settings
 from optparse import OptionParser
 from flask import request
 from flask_api import FlaskAPI, exceptions
 from cassandra.cluster import Cluster
 from structures import DynamicActionArray
 from util import parse_timesamp, parse_action, cassandra_insert
+import settings
 
 parser = OptionParser()
 parser.add_option("-p", "--port", dest="port",
