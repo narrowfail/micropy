@@ -1,4 +1,4 @@
-numpy==1.12.1
+numpy==1.22.0
 Flask==1.0
 Flask-API==0.7.1
 Markdown==2.6.8
